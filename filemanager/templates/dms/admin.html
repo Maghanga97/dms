@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <title>{% block title %} {% endblock %} DMS</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg navbar-light bg-info">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">DMS | Dashboard</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/add-file/">Add a File</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  More Actions
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/search/">Search for a file</a></li>
+                  <li><a class="dropdown-item" href="">Add file category</a></li>
+                  <li><a class="dropdown-item" href="">View system Logs</a></li>
+                </ul>
+              </li>
+            </ul>
+
+
+            <div class="d-flex">
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Welcome {{logged_user}}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="/reset-pass/">Change Password</a></li>
+                      <li><a class="dropdown-item" href="/logout/">Logout</a></li>
+                    </ul>
+                  </li>
+                </ul>    
+            </div>
+
+
+        </div>
+        </div>
+      </nav> 
+      
+      <div class="row">
+        <div class="col-lg-2 mt-2">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header bg-info">
+                          Quick Summary
+                        </div>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">All my files <span class="badge bg-success">{{user_files.count}} </span></li>
+                        </ul>
+                      </div>        
+                </div>
+                <!-- end of col -->
+            </div>
+            <!-- first row in first col -->
+            <div class="row">
+                <div class="col-lg-12 mt-2">
+                    <div class="card">
+                        <div class="card-header bg-info">
+                          Quick Actions
+                        </div>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item"><a href="/manage-users/">Manage Users</a></li>
+                          <li class="list-group-item"><a href="/settings/">Settings</a></li>
+                        </ul>
+                      </div>        
+                </div>
+                <!-- end of col -->
+            </div>
+            <!-- second row in first col -->
+        </div>
+        <!-- end of first column div -->
+        <div class=" col-8 col-lg-10 mt-2">
+          {% block content %}
+            <h2>Recent Files</h2><br>
+            {% for message in messages %}
+            <div class="alert alert-dark mt-2">
+              <h5>{{message}}</h5>
+            </div>
+           {% endfor %}
+        
+            <!-- <form action="" method="get">
+                {{filter.form}}
+                <input type="submit" value="filter">
+            </form><br> -->
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">File Name</th>
+                        <th scope="col">File Description</th>
+                        <th scope="col">Added</th>
+                        <th scope="col">View file</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                      {% for file in files %}
+                      <tr>
+                        <th scope="row">{{file.id}} </th>
+                        <td>{{file.name}}</td>
+                        <td>{{file.name}}</td>
+                        <td>{{file.created_at | timesince}} ago </td>
+                        <td>
+                          <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#modal{{file.id}}">Share</button>
+                        </td>            
+                        <td><a href="{{file.file_location.url}}">View file</a></td>
+                      </tr>
+
+                    <!-- incident modal goes here -->
+                    <div class="modal" id="modal{{file.id}}">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Share a file</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          </div>
+
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                            {% include 'dms/modals/share-file.html' %}
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+
+                      {% empty %}
+                      <tr>
+                        <td><h3>No file found</h3></td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  <div class="pagination">
+                    <span class="step-links">
+                        {% if files.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ files.previous_page_number }}">previous</a>
+                        {% endif %}
+                
+                        <span class="current">
+                            Page {{ files.number }} of {{ files.paginator.num_pages }}.
+                        </span>
+                
+                        {% if files.has_next %}
+                            <a href="?page={{ files.next_page_number }}">next</a>
+                            <a href="?page={{ files.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                  </div>
+                      <!-- pagination div ends here -->
+            </div>
+            <!-- end of table div -->
+            {% endblock %}
+        </div>
+        <!-- end of second col div -->
+      </div>
+      <!-- end of outer row div -->
+    </div>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

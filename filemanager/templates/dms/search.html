@@ -1,0 +1,25 @@
+{% extends 'dms/admin.html' %}
+
+{% block title %} Add File | {% endblock %}
+
+{% block content %}
+{% load static %}
+<h2>Add a file</h2><br>
+<div class="card">
+    <div class="card-body">
+        <form action="/search/" method="get">
+            <input type="text" name="search-input" placeholder="Search here by file title, description, category or department....">
+            <input type="submit" class="btn btn-info" value="Add file">
+        </form>				
+    </div>
+</div><br>
+{% for message in messages %}
+<ul>
+  <li><h5>{{message}}</h5></li>
+</ul>
+{% endfor %}
+
+<a href="/">Go back to the home page</a>
+
+
+{% endblock %}

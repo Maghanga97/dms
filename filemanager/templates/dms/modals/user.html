@@ -1,0 +1,38 @@
+<form action="/register/" method="POST" class="pt-3"> 
+    {% csrf_token %}
+    <input type="hidden" value="manage-users" name="link-tag">
+  <div class="form-group mb-2">
+    <input type="text" class="form-control form-control-lg" id="user_name" name="username" placeholder="Your username" required>
+  </div>
+  <div class="form-group mb-2">
+    <input type="email" class="form-control form-control-lg" id="user_mail" name="email" placeholder="Your email">
+  </div>
+
+  <div class="form-group mb-2">
+    <input type="tel" class="form-control form-control-lg" id="user_mail" name="phone_no" placeholder="Your phone number">
+  </div>
+  
+  <div class="form-group mb-2">
+    <select class="form-control form-control-lg" id="id_organization" name="organization" required>
+      <option value="">Select Organization</option>
+      {% for organization in organizations %}
+      <option value="{{organization.name}}">{{ organization.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group mb-2">
+    <select class="form-control form-control-lg" id="id_department" name="department" required>
+      <option value="">Select user department</option>
+      {% for dept in departments %}
+      <option value="{{dept.name}}">{{ dept.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group mb-2">
+    <input type="password" class="form-control form-control-lg" id="user_pass" name="user-pass" placeholder="Password" required>
+  </div>
+
+  <div class="">
+    <button class="btn btn-block btn-warning btn-lg font-weight-medium auth-form-btn" type="submit">Add User</button>
+  </div>
+</form>

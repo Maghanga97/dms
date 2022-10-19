@@ -1,0 +1,50 @@
+{% extends 'dms/admin.html' %}
+
+{% block title %} Settings | {% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="card">
+    <div class="card-body">
+        <form action="/add-file-category/" method="post">
+          {% csrf_token %}
+            <label for="file-category">File category name</label>
+            <input type="text" name="file-category" class="form-control mb-3" placeholder="Enter category name here">
+            <input type="submit" class="btn btn-info" value="submit">
+        </form>				
+    </div>
+</div><br>
+
+<div class="card">
+    <div class="card-body">
+        <form action="/add-department/" method="post">
+          {% csrf_token %}
+            <label for="file-category">Department name</label>
+            <input type="text" name="new-department" class="form-control mb-3" placeholder="Enter department name here">
+            <input type="submit" class="btn btn-info" value="submit">
+        </form>				
+    </div>
+</div><br>
+
+<div class="card">
+    <div class="card-body">
+        <form action="/add-file-access-status/" method="post">
+          {% csrf_token %}
+            <label for="file-category">File access status name</label>
+            <input type="text" name="file-visibility" class="form-control mb-3" placeholder="Enter access status name here">
+            <input type="submit" class="btn btn-info" value="submit">
+        </form>				
+    </div>
+</div><br>
+
+{% for message in messages %}
+<ul>
+  <li><h5>{{message}}</h5></li>
+</ul>
+{% endfor %}
+
+<a href="/">Go back to the home page</a>
+
+
+{% endblock %}
